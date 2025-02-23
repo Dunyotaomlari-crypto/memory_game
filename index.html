@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>                     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <link rel="icon" href="favicon.ico">
+</head>
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: lightblue;
+}
+    canvas {
+    display: block;
+}
+
+</style>
+<body>
+    
+   <script src="script.js">
+        let images=[];
+        let images2=[];
+        let tiles=[];
+        let flippedtiles=[];
+        function preload(){
+            images.push(loadImage("anime1.png"));
+            images.push(loadImage("anime2.png"));
+            images.push(loadImage("anime3.png"));
+            images.push(loadImage("anime4.png"));
+            images.push(loadImage("anime5.png"));
+            images.push(loadImage("anime6.png"));
+            images.push(loadImage("anime7.png"));
+            images.push(loadImage("anime8.png"));
+            images.push(loadImage("anime9.png"));
+            images.push(loadImage("anime10.png"));
+        }
+        function setup(){
+            createCanvas(windowWidth,windowHeight);
+            background('lightblue');
+            for(let i=0;i<images.length;i++){
+                images2.push(images[i]);
+                images2.push(images[i]);
+                
+            }
+            shuffle(images2,true);
+            let index=0;
+            for(n=0;n<5;n++){
+                for(s=0;s<4;s++){
+                    let x=n*200+450;
+                    let y=s*200+50;
+                    fill('white');
+                    strokeWeight(3);
+                    rect(x,y,190,190,10);
+                    let randomIndex=n*4+s;
+                    let selected=images2[randomIndex];
+                    image(selected,x,y,190,190);
+                    tiles.push({
+                        x:x,
+                        y:y,
+                        isFlipped:false,
+                        image:images2[index]
+                    });
+                    index++;
+                }
+            }
+        }
+        function draw(){
+            background('blue');
+            for(let tile of tiles){
+                fill('white');
+                strokeWeight(3);
+                rect(tile.x,tile.y,190,190,10); 
+                if(tile.isFlipped){
+                    image(tile.image,tile.x,tile.y,190,190);
+                }
+            }
+        }
+        function mousePressed(){
+            if(flippedtiles.length>=2){
+                return;
+            }
+            for(let tile of tiles){
+                if(mouseX>tile.x && mouseX<tile.x+190 && mouseY>tile.y && mouseY<tile.y+190 && !tile.isFlipped){
+                    tile.isFlipped=true;
+                    flippedtiles.push( tile);
+                    break;
+                }
+            }
+            if(flippedtiles.length==2){
+                setTimeout(()=>{
+                    if(flippedtiles[0].image !== flippedtiles[1].image){
+                        flippedtiles[0].isFlipped=false;
+                        flippedtiles[1].isFlipped=false;
+
+                    } 
+                    flippedtiles=[];
+                },1000)
+            }
+        }
+   </script> 
+</body>
+</html>
